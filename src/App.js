@@ -14,7 +14,7 @@ import EditIncoming from './Incoming/editIncoming';
 
 let currentPathNonState = 'details';
 
-function App({ islogged, username, isBhabhi }) {
+function App({ islogged, username, isBhabhi, isPartialAccess }) {
 
   // const [incomingEditToggle, setIncomingEditToggle] = useState(false);
 
@@ -336,12 +336,12 @@ function App({ islogged, username, isBhabhi }) {
     <div className="App">
 
       <header className="App-header">
-        {!editmode ? (islogged &&
+        {!editmode ? ((islogged || isPartialAccess) &&
           <Add
             currentpath={currentpath}
             receiveddate={startDate}
           />) :
-          (islogged &&
+          ((islogged || isPartialAccess) &&
             <Edit
               currentpath={currentpath}
               receivedid={editId}
@@ -377,11 +377,11 @@ function App({ islogged, username, isBhabhi }) {
 
           {/* other info details */}
 
-          {!isBhabhi && <span style={{ display: 'inline-block', width: '15px' }} onClick={() => { setShowOtherDetails(!showOtherDetails) }}>
+          {(isPartialAccess || !isBhabhi) && <span style={{ display: 'inline-block', width: '15px' }} onClick={() => { setShowOtherDetails(!showOtherDetails) }}>
             <b style={{ color: 'dodgerblue' }}>&#9776;</b></span>}
-          {showOtherDetails && !isBhabhi && <>
+          {showOtherDetails && (isPartialAccess || !isBhabhi) && <>
             <>
-              {islogged && salaryEditToggle &&
+              {(isPartialAccess || islogged) && salaryEditToggle &&
                 <div>
                   <input type='number' value={lSalary}
                     placeholder='enter salary'
@@ -509,7 +509,7 @@ function App({ islogged, username, isBhabhi }) {
               border: '2px solid #ffa899', borderRadius: '25px', padding: '5px'
             }}
               onClick={outcomingDetails} >Outgoing</div>
-            {!isBhabhi && <div style={{
+            {(isPartialAccess || !isBhabhi) && <div style={{
               color: 'lightgreen', fontWeight: '500',
               border: '2px solid lightgreen', borderRadius: '25px', padding: '5px'
             }}
@@ -612,7 +612,9 @@ function App({ islogged, username, isBhabhi }) {
 
 
           <hr style={{ height: '3px', border: '2px solid lightgreen', width: '100%', marginTop: `${outcomingMoneyToggle ? '2rem' : ''}` }} />
-          {currentPathNonState === 'details' && incomingMoneyToggle && !isBhabhi ?
+          {currentPathNonState === 'details' && incomingMoneyToggle
+            && (isPartialAccess || !isBhabhi)
+            ?
             <div style={{ marginLeft: '1rem' }}>
               <table border='2px solid' style={{ borderColor: 'lightgreen', marginBottom: '1rem' }}>
                 <thead>
@@ -683,8 +685,10 @@ function App({ islogged, username, isBhabhi }) {
               </table>
             </div>
             :
-            !isBhabhi ? <span>{'click '}<span style={{ color: 'lightgreen', fontWeight: '500', marginBottom: '1rem' }}
-              onClick={incomingDetails} >Incoming</span>{' to show details'}</span> : null
+            (isPartialAccess || !isBhabhi) ?
+              <span>{'click '}<span style={{ color: 'lightgreen', fontWeight: '500', marginBottom: '1rem' }}
+                onClick={incomingDetails} >Incoming</span>{' to show details'}</span>
+              : null
           }
 
 
@@ -695,12 +699,12 @@ function App({ islogged, username, isBhabhi }) {
             <div style={{ marginBottom: '1rem' }}>
               {!incomingeditmode
                 ?
-                (islogged &&
+                ((islogged || isPartialAccess) &&
                   <AddIncoming
                     currentpath={'details'}
                     receiveddate={startDate} />)
                 :
-                (islogged &&
+                ((islogged || isPartialAccess) &&
                   <EditIncoming
                     currentpath={'details'}
                     receivedid={incomingeditId}

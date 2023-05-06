@@ -175,7 +175,7 @@ function AppLogged() {
           <br />
           <div style={{ color: 'grey' }}>{error}</div>
         </div>
-        : <App islogged={logged} username={username.toLowerCase()} isLaxman={username.toLowerCase() === 'laxman'} isBhabhi={username.toLowerCase() === 'amruthavani'}
+        : <App islogged={logged} isPartialAccess={username.toLowerCase() === 'amruthavani'} username={username.toLowerCase()} isLaxman={username.toLowerCase() === 'laxman'} isBhabhi={username.toLowerCase() === 'amruthavani'}
         // !logged && 
         // (username.toLowerCase() === 'amrutha' || username.toLowerCase() !== 'amrutha' )} 
         />
